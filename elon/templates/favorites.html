@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>⭐ Tanlangan elonlar</h2>
+
+<div class="row">
+    {% for elon in elons %}
+    <div class="col-md-4">
+        <div class="card mb-3 shadow-sm">
+
+            {% if elon.image %}
+            <img src="{{ elon.image.url }}" class="card-img-top" style="height:200px; object-fit:cover;">
+            {% endif %}
+
+            <div class="card-body">
+                <h5>{{ elon.title }}</h5>
+                <p>{{ elon.price }} so'm</p>
+                <p><strong>{{ elon.category.name }}</strong></p>
+
+                <a href="{% url 'detail' elon.id %}" class="btn btn-primary btn-sm">
+                    Batafsil
+                </a>
+            </div>
+
+        </div>
+    </div>
+    {% empty %}
+        <p>Hali hech narsa tanlanmagan ⭐</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

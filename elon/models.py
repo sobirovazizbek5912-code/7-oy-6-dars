@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
@@ -14,17 +16,10 @@ class Elon(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='elons/')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    likes = models.ManyToManyField(User, related_name='liked_elons', blank=True)
 
     def __str__(self):
         return self.title
-class Comment(models.Model):
-    elon = models.ForeignKey(Elon, on_delete=models.CASCADE, related_name='comments')
-    name = models.CharField(max_length=100)
-    text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
 
 
 class Comment(models.Model):
@@ -33,3 +28,6 @@ class Comment(models.Model):
     name = models.CharField(max_length=100)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

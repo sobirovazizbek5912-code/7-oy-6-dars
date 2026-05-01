@@ -1,7 +1,11 @@
-{% extends 'base.html' %}
 
+
+{% extends 'base.html' %}
 {% block content %}
 
+<a href="{% url 'favorites' %}" class="btn btn-warning btn-sm">
+    ⭐ Tanlangan
+</a>
 <h2 class="mb-3">E’lonlar</h2>
 <a href="{% url 'create' %}" class="btn btn-success mb-3">
     ➕ E’lon qo‘shish
@@ -32,6 +36,15 @@
             <h5>{{ elon.title }}</h5>
             <p>{{ elon.price }} so'm</p>
             <p><strong>{{ elon.category.name }}</strong></p>
+            <a href="{% url 'like_elon' elon.id %}" class="btn btn-light btn-sm">
+    {% if user in elon.likes.all %}
+        ❤️ Unlike
+    {% else %}
+        🤍 Like
+    {% endif %}
+</a>
+
+<p>❤️ {{ elon.likes.count }}</p>
 
             <a href="{% url 'detail' elon.id %}" class="btn btn-primary btn-sm">
                 Batafsil
