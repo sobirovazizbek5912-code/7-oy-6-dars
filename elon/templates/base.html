@@ -16,10 +16,17 @@
     </div>
 </nav>
 
-<!-- 🔵 CONTENT -->
 <div class="container mt-4">
+    <main>
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="alert alert-{% if message.tags == 'error' %}danger{%else%}{{message.tags}}{%endif%}">{{message}}</li>
+            {%endfor%}
+        </ul>
+
     {% block content %}
     {% endblock %}
+    </main>
 </div>
 
 </body>

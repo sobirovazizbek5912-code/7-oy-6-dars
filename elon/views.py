@@ -1,12 +1,15 @@
+
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Elon, Category, Comment
 from .forms import ElonForm
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpRequest,HttpResponse
+from django.core.paginator import Paginator
 
 
-# 🔥 HOME
-def home(request):
+def home(request:HttpRequest):
     categories = Category.objects.all()
+
     category_id = request.GET.get('category')
 
     if category_id:
@@ -14,13 +17,18 @@ def home(request):
     else:
         elons = Elon.objects.all()
 
-    return render(request, 'home.html', {
-        'elons': elons,
-        'categories': categories
-    })
+    paginator=Paginator(elons,3)
+    page = paginator.page(request.GET.get('page',default=1))
+    context = {
+            'page': page,
+            'categories': categories
+        }
 
 
-# 🔥 DETAIL PAGE
+    return render(request, 'home.html',context)
+
+
+
 def elon_detail(request, id):
     elon = get_object_or_404(Elon, id=id)
     comments = elon.comments.all()
@@ -31,12 +39,12 @@ def elon_detail(request, id):
     })
 
 
-# 🔥 CREATE
 def create_elon(request):
     if request.method == 'POST':
         form = ElonForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request,'Elon muafiqiyatli qoshildi ')
             return redirect('home')
     else:
         form = ElonForm()
@@ -44,7 +52,7 @@ def create_elon(request):
     return render(request, 'create.html', {'form': form})
 
 
-# 🔥 UPDATE
+
 def update_elon(request, id):
     elon = get_object_or_404(Elon, id=id)
 
@@ -58,19 +66,25 @@ def update_elon(request, id):
 
     return render(request, 'update.html', {'form': form})
 
+def delete_elon(request, id: int):
+    if request.user.is_staff:
+        elon = get_object_or_404(Elon, id=id)
 
-# 🔥 DELETE
-def delete_elon(request, id):
-    elon = get_object_or_404(Elon, id=id)
+        if request.method == 'POST':
+            elon.delete()
+            messages.success(request, "Elon muvaffaqiyatli o‘chirildi")
+            return redirect('home')
 
-    if request.method == 'POST':
-        elon.delete()
+        messages.warning(request, "Shu elonni aniq o‘chirmoqchimisiz?")
+        return render(request, 'delete.html', {'elon': elon})
+
+    else:
+        messages.error(request, "Sizda ruxsat yo‘q")
         return redirect('home')
 
-    return render(request, 'delete.html', {'elon': elon})
 
 
-# 🔥 ADD COMMENT
+
 def add_comment(request, elon_id):
     elon = get_object_or_404(Elon, id=elon_id)
 
@@ -85,7 +99,7 @@ def add_comment(request, elon_id):
     return redirect('detail', id=elon.id)
 
 
-# 🔥 UPDATE COMMENT
+
 def update_comment(request, id):
     comment = get_object_or_404(Comment, id=id)
 
@@ -98,7 +112,6 @@ def update_comment(request, id):
     return render(request, 'update_comment.html', {'comment': comment})
 
 
-# 🔥 DELETE COMMENT
 def delete_comment(request, id):
     comment = get_object_or_404(Comment, id=id)
 

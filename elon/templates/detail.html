@@ -20,9 +20,23 @@
 
 </div>
 
+<div class="card-body">
+    <h2>Elon mualifi</h2>
+    {% for author in elon.author.all %}
+    <p><a href="">{{author}}</a>
+    </p>
+
+    {% endfor %}
+</div>
+
+
+<div class="card-body">
+    <h3>Nayshriyot nomi</h3>
+    <p>{{elon.publisher}}</p>
+</div>
+
 <hr>
 
-<!-- COMMENT FORM -->
 <h4>Izoh qoldirish</h4>
 
 <form method="POST" action="{% url 'add_comment' elon.id %}">
@@ -37,7 +51,8 @@
 
 <hr>
 
-<!-- COMMENTS -->
+
+
 <h4>Izohlar</h4>
 
 {% for comment in elon.comments.all %}

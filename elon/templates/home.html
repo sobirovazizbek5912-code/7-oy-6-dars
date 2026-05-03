@@ -24,7 +24,7 @@
 
 <div class="row">
 
-{% for elon in elons %}
+{% for elon in page.object_list %}
 <div class="col-md-4">
     <div class="card mb-3 shadow-sm">
 
@@ -51,10 +51,11 @@
             </a>
         </div>
 
+
     </div>
 </div>
+
 {% endfor %}
-
+    {%include 'main/components/pagination.html'%}
 </div>
-
 {% endblock %}
