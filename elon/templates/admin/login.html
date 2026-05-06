@@ -1,0 +1,66 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+<style>
+    body {
+        background: #f5f6fa;
+    }
+
+    .login-container {
+        width: 350px;
+        margin: 120px auto;
+        padding: 25px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .login-container h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 22px;
+    }
+
+    .submit-row input {
+        width: 100%;
+        background: #007bff;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .submit-row input:hover {
+        background: #0056b3;
+    }
+
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0 15px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h1>Django Admin Login</h1>
+
+    <form action="" method="post">
+        {% csrf_token %}
+
+        <label>Username</label>
+        {{ form.username }}
+
+        <label>Password</label>
+        {{ form.password }}
+
+        <div class="submit-row">
+            <input type="submit" value="Kirish">
+        </div>
+    </form>
+</div>
+{% endblock %}

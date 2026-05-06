@@ -1,0 +1,86 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+<style>
+    /* Header container */
+    .custom-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 20px;
+        background: linear-gradient(90deg, #1f2937, #111827);
+        color: white;
+        border-bottom: 1px solid #2d3748;
+    }
+
+    /* Left title */
+    .custom-header .title {
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    /* Right user section */
+    .custom-header .user-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .custom-header .username {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    /* Logout button */
+    .logout-btn {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: 0.2s;
+    }
+
+    .logout-btn:hover {
+        background: #dc2626;
+        transform: scale(1.05);
+    }
+
+    /* small screen */
+    @media (max-width: 600px) {
+        .custom-header {
+            flex-direction: column;
+            gap: 10px;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<div class="custom-header">
+
+    <div class="title">
+        ⚙️ Admin Panel
+    </div>
+
+    <div class="user-box">
+        {% if user.is_authenticated %}
+            <div class="username">
+                👤 {{ user.username }}
+            </div>
+
+            <form method="post" action="{% url 'admin:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">
+                    Logout
+                </button>
+            </form>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
